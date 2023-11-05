@@ -1,0 +1,4 @@
+import pandas as pd
+%load_ext google.colab.data_table
+co2_emissions = pd.read_csv ("co2_emissions.csv")
+co2_emissions
