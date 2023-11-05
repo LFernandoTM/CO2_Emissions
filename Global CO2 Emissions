@@ -2,3 +2,106 @@ import pandas as pd
 %load_ext google.colab.data_table
 co2_emissions = pd.read_csv ("co2_emissions.csv")
 co2_emissions
+
+#remove no countries rows
+co2_emissions_countries = co2_emissions.loc[3:]
+co2_emissions_countries
+
+#sort by 2021 values
+countries_highest_co2 = co2_emissions_countries.sort_values(by='2021', ascending=False)
+#check top 5 countries with higher co2 emissions
+top_5 = countries_highest_co2.head(5)
+top_5
+
+#creating plot top 5 countries
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+years = top_5.columns[1:]
+for country, row in top_5.iterrows():
+  plt.plot(years, row[1:], label = row[0])
+
+plt.title('CO2 Emissions of Top 5 Countries (1990-2021)')
+plt.xlabel("Years")
+plt.ylabel("CO2 Emissions")
+plt.legend(loc='center left', bbox_to_anchor=(1,0.5))
+plt.grid()
+plt.show()
+
+#add columns with increasing/decreasing per year since 1990
+co2_emissions_countries
+co2_emissions_countries['% 1990'] = 100
+co2_emissions_countries['% 2005'] = ((co2_emissions_countries['2005'] / co2_emissions_countries['1990']) * 100)
+co2_emissions_countries['% 2017'] = ((co2_emissions_countries['2017'] / co2_emissions_countries['1990']) * 100)
+co2_emissions_countries['% 2021'] = ((co2_emissions_countries['2021'] / co2_emissions_countries['1990']) * 100)
+co2_emissions_countries
+
+#sort and check top 3 countries
+co2_emissions_increased = co2_emissions_countries.sort_values(by='% 2021', ascending=False)
+top_3 = co2_emissions_increased.head(3)
+top_3
+
+#creating plot top 3 countries
+fig, ax = plt.subplots()
+years = top_3.columns[5:]
+for country, row in top_3.iterrows():
+  plt.plot(years, row[5:], label = row[0])
+
+plt.title('CO2 Increased/Decreased Top 3 Countries')
+plt.xlabel("Years")
+plt.ylabel("CO2 Emissions (%)")
+plt.legend(loc='center left', bbox_to_anchor=(1,0.5))
+plt.grid()
+plt.show()
+
+#sort and check bottom 3 countries
+co2_emissions_increased = co2_emissions_countries.sort_values(by='% 2021', ascending=False)
+bottom_3 = co2_emissions_increased.tail(3)
+bottom_3
+
+#creating plot bottom 3 countries
+fig, ax = plt.subplots()
+years = bottom_3.columns[5:]
+for country, row in bottom_3.iterrows():
+  plt.plot(years, row[5:], label = row[0])
+
+plt.title('CO2 Increased/Decreased Bottom 3 Countries')
+plt.xlabel("Years")
+plt.ylabel("CO2 Emissions (%)")
+plt.legend(loc='center left', bbox_to_anchor=(1,0.5))
+plt.grid()
+plt.show()
+
+# Filter and select top and bottom three countries
+co2_emissions_increased_filtered = co2_emissions_increased[co2_emissions_increased['1990'] >= 5]
+co2_emissions_increased_filtered_graph2 = co2_emissions_increased_filtered.sort_values(by='% 2021', ascending=False)
+top_three_filtered = co2_emissions_increased_filtered_graph2.head(3)
+bottom_three_filtered = co2_emissions_increased_filtered_graph2.tail(3)
+
+#creating plot top 3 countries (filtered)
+fig, ax = plt.subplots()
+years = top_three_filtered.columns[5:]
+for country, row in top_three_filtered.iterrows():
+  plt.plot(years, row[5:], label = row[0])
+
+plt.title('CO2 Increased/Decreased Top 3 Countries (>5)')
+plt.xlabel("Years")
+plt.ylabel("CO2 Emissions (%)")
+plt.legend(loc='center left', bbox_to_anchor=(1,0.5))
+plt.grid()
+plt.show()
+
+#check bottom 3 filtered table
+bottom_three_filtered
+
+#creating plot bottom 3 countries (filtered)
+fig, ax = plt.subplots()
+years = bottom_three_filtered.columns[5:]
+for country, row in bottom_three_filtered.iterrows():
+  plt.plot(years, row[5:], label = row[0])
+
+plt.title('CO2 Increased/Decreased Bottom 3 Countries (>5)')
+plt.xlabel("Years")
+plt.ylabel("CO2 Emissions (%)")
+plt.legend(loc='center left', bbox_to_anchor=(1,0.5))
+plt.grid()
+plt.show()
